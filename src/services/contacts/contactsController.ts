@@ -1,9 +1,7 @@
-import { Request, Response, NextFunction } from "express";
-import q2m from "query-to-mongo";
-import createError from "http-errors";
-import { Contact } from "./types";
-import { User } from "../users/types";
-import UserModel from "../users/schema";
+import { Request, Response, NextFunction } from "express"
+import { Contact } from "./types"
+import { User } from "../users/types"
+import UserModel from "../users/schema"
 
 export const addContact = async (
   req: Request<Pick<User, "userNumber">, {}, Contact>,
@@ -11,32 +9,32 @@ export const addContact = async (
   next: NextFunction
 ) => {
   try {
-    const { userNumber } = req.params;
-    const { contactsNumber, name, profileImg, about } = req.body;
+    const { userNumber } = req.params
+    const { contactsNumber, contactsName, profileImg, about } = req.body
 
-    const { _id } = await UserModel.findOne({ userNumber: userNumber });
+    const { _id } = await UserModel.findOne({ userNumber: userNumber })
 
     if (!_id) {
-      console.error({ error: "user not found" });
-      return res.send({ error: "user not found" });
+      console.error({ error: "user not found" })
+      return res.send({ error: "user not found" })
     }
 
     const newContact: Contact = {
       contactsNumber,
-      name: name || "",
+      contactsName,
       profileImg,
       about,
-    };
+    }
     // push to users contacts array
     const result = await UserModel.findByIdAndUpdate(
       { _id },
       { $push: { contacts: newContact } },
       { new: true }
-    );
+    )
 
-    res.send(result);
+    res.send(result)
   } catch (error) {}
-};
+}
 
 export const allContacts = async (
   req: Request<Pick<User, "userNumber">, {}, Contact>,
@@ -44,29 +42,26 @@ export const allContacts = async (
   next: NextFunction
 ) => {
   try {
-    const { userNumber } = req.params;
-    console.log(userNumber);
-    console.log("hello world");
-    const users = await UserModel.find({ userNumber });
-    const contacts = users[0].contacts;
+    const { userNumber } = req.params
 
-    //users.forEach((u) => console.log(u.userNumber === userNumber))
+    const user = await UserModel.find({ userNumber })
 
-    //console.log(users)
-    res.send(contacts);
+    const contacts = user[0].contacts
+
+    res.send(contacts)
   } catch (error) {
-    next(error);
+    next(error)
   }
-};
+}
 
 export const getContact = (req: Request, res: Response) => {
-  res.send("Returns one contact");
-};
+  res.send("Returns one contact")
+}
 
 export const updateContact = (req: Request, res: Response) => {
-  res.send("Returns one contact");
-};
+  res.send("Returns one contact")
+}
 
 export const deleteContact = (req: Request, res: Response) => {
-  res.send("Returns one contact");
-};
+  res.send("Returns one contact")
+}

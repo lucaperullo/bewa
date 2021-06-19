@@ -16,13 +16,12 @@ export let registerUser = async (
 
     if (user) {
       console.error("user already exists")
-      return res.send({ error: "User already exists" })
+      return res.status(400).send({ error: "User already exists" })
     }
-
     const newUser = new UserModel({ userNumber })
     const result = await newUser.save()
 
-    res.send(result)
+    res.status(200).send(result)
   } catch (error) {
     next(error)
   }

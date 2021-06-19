@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
 import listEndpoints from "express-list-endpoints"
+import { corsHandler } from "./core/corsHandler"
 import { default as cookieParser } from "cookie-parser"
 
 import homeRoute from "./services/home/homeRoute"
@@ -17,7 +18,7 @@ process.env.NODE_ENV !== "production" && dotenv.config()
 const port = process.env.PORT || 5000
 
 // Middleware
-app.use(cors())
+app.use(corsHandler())
 app.use(express.json())
 app.use(cookieParser())
 

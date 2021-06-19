@@ -16,8 +16,10 @@ global.activeSockets = {
 io.on("connection", (socket) => {
   console.log(socket.id)
 
-  socket.on("sendMessage", (groupId, message) => {
-    // await RoomModel.findByIdAndUpdate
+  // group id should be added to arguments of callback !!!!
+  socket.on("sendMessage", async (message, groupId) => {
+    // await GroupModel.findByIdAndUpdate
+    console.log(message)
     socket.to(groupId).emit(message)
   })
 
