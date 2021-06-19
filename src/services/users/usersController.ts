@@ -12,19 +12,17 @@ export let registerUser = async (
     const { userNumber } = req.body
     console.log(userNumber)
 
-    const user = await UserModel.find({ userNumber: userNumber })
-    console.log(user)
+    const user = await UserModel.findOne({ userNumber: userNumber })
 
-    if (user.length > 0) {
+    if (user) {
       console.error("user already exists")
       return res.send({ error: "User already exists" })
-    } else {
-      const newUser = new UserModel({ userNumber })
-      const result = await newUser.save()
-  
-      res.send(result)
     }
 
+    const newUser = new UserModel({ userNumber })
+    const result = await newUser.save()
+
+    res.send(result)
   } catch (error) {
     next(error)
   }
@@ -65,8 +63,12 @@ export let getUser = async (
   }
 }
 
-export let allUsers = (req: Request, res: Response) => {
-  res.send("Returns all rooms")
+export let allUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await UserModel.find({})
+
+    res.send(users)
+  } catch (error) {}
 }
 
 export let updateUser = async (req: Request<{}, {}, User>, res: Response, next: NextFunction) => {

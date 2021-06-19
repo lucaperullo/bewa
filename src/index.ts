@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
 import listEndpoints from "express-list-endpoints"
-import cookieParser from "cookie-parser"
+import { default as cookieParser } from "cookie-parser"
 
 import homeRoute from "./services/home/homeRoute"
 import routes from "./routes"

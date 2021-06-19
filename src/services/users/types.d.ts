@@ -1,20 +1,14 @@
-import { Document, Model } from "mongoose"
+import { Document, Model, ObjectId } from "mongoose"
+import { Contact } from "../contacts/types"
 
-interface BasicUserInfo {
+export interface User {
   _id?: string
   userNumber: string
   profileImg?: string
   name?: string
-}
-
-export interface User extends BasicUserInfo {
   password?: string
   about?: string
   contacts?: Contact[]
-}
-
-export interface Contact extends BasicUserInfo {
-  nickname?: string
 }
 
 export interface UserDocument extends User, Document<string> {}
